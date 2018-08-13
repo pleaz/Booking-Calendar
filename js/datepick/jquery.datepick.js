@@ -174,7 +174,7 @@ $.extend(Datepick.prototype, {
 	_selectableClass: ['', 'ui-state-default'], // Selectable cell class
 	_unselectableClass: ['datepick-unselectable',
 		'ui-datepicker-unselectable ui-state-disabled'], // Unselectable cell class
-	_selectedClass: ['datepick-current-day', 'ui-state-active'], // Selected day class
+	_selectedClass: ['datepick-current-day webix_cal_select', 'ui-state-active'], // Selected day class
 	_dayOverClass: ['datepick-days-cell-over', 'ui-state-hover'], // Day hover class
 	_weekOverClass: ['datepick-week-over', 'ui-state-hover'], // Week hover class
 	_statusClass: ['datepick-status', 'ui-datepicker-status'], // Status bar class
@@ -311,9 +311,9 @@ $.extend(Datepick.prototype, {
 		$('body').append(inst.dpDiv);
 		this._updateDatepick(inst);
 		// Fix width for dynamic number of date pickers
-		inst.dpDiv.width(this._getNumberOfMonths(inst)[1] *
+		/*inst.dpDiv.width(this._getNumberOfMonths(inst)[1] *
 			$('.' + this._oneMonthClass[this._get(inst, 'useThemeRoller') ? 1 : 0],
-			inst.dpDiv)[0].offsetWidth);
+			inst.dpDiv)[0].offsetWidth);*/
 		divSpan.append(inst.dpDiv);
 		this._updateAlternate(inst);
 	},
@@ -1705,16 +1705,14 @@ $.extend(Datepick.prototype, {
 		prevBigText = (!navigationAsDateFormat ? prevBigText : this.formatDate(prevBigText,
 			this._daylightSavingAdjust(new Date(drawYear, drawMonth - stepBigMonths, 1)),
 			this._getFormatConfig(inst)));
-		var prev = '<div class="' + this._prevClass[useTR] + '">' +
+		var prev = '<div onclick="jQuery.datepick._adjustDate(\'#' + inst.id +
+			'\', -' + stepMonths + ', \'M\');" class="webix_cal_prev_button ' + this._prevClass[useTR] + '">' +
 			(this._canAdjustMonth(inst, -1, drawYear, drawMonth) ?
 			(showBigPrevNext ? '<a href="javascript:void(0)" onclick="jQuery.datepick._adjustDate(\'#' +
-			inst.id + '\', -' + stepBigMonths + ', \'M\');"' +
-			this._addStatus(useTR, showStatus, inst.id, this._get(inst, 'prevBigStatus'), initStatus) +
-			'>' + prevBigText + '</a>' : '') +
-			'<a href="javascript:void(0)" onclick="jQuery.datepick._adjustDate(\'#' +
-			inst.id + '\', -' + stepMonths + ', \'M\');"' +
+			inst.id + '\', -' + stepBigMonths + ', \'M\');" ' +
 			this._addStatus(useTR, showStatus, inst.id, this._get(inst, 'prevStatus'), initStatus) +
-			'>' + prevText + '</a>' :
+			this._addStatus(useTR, showStatus, inst.id, this._get(inst, 'prevBigStatus'), initStatus) +
+			'>' + prevBigText + '</a>' : '') + '' + '' :
 			(hideIfNoPrevNext ? '&#xa0;' : (showBigPrevNext ? '<label>' + prevBigText + '</label>' : '') +
 			'<label>' + prevText + '</label>')) + '</div>';
 		var nextText = this._get(inst, 'nextText');
@@ -1725,12 +1723,11 @@ $.extend(Datepick.prototype, {
 		nextBigText = (!navigationAsDateFormat ? nextBigText : this.formatDate(nextBigText,
 			this._daylightSavingAdjust(new Date(drawYear, drawMonth + stepBigMonths, 1)),
 			this._getFormatConfig(inst)));
-		var next = '<div class="' + this._nextClass[useTR] + '">' +
-			(this._canAdjustMonth(inst, +1, drawYear, drawMonth) ?
-			'<a href="javascript:void(0)" onclick="jQuery.datepick._adjustDate(\'#' +
+		var next = '<div onclick="jQuery.datepick._adjustDate(\'#' +
 			inst.id + '\', +' + stepMonths + ', \'M\');"' +
 			this._addStatus(useTR, showStatus, inst.id, this._get(inst, 'nextStatus'), initStatus) +
-			'>' + nextText + '</a>' +
+			' class="webix_cal_next_button ' + this._nextClass[useTR] + '">' +
+			(this._canAdjustMonth(inst, +1, drawYear, drawMonth) ?
 			(showBigPrevNext ? '<a href="javascript:void(0)" onclick="jQuery.datepick._adjustDate(\'#' +
 			inst.id + '\', +' + stepBigMonths + ', \'M\');"' +
 			this._addStatus(useTR, showStatus, inst.id, this._get(inst, 'nextBigStatus'), initStatus) +
@@ -1750,8 +1747,7 @@ $.extend(Datepick.prototype, {
 			'</div>' + (isRTL ? prev : next) + '</div>' +
 			(prompt ? '<div class="' + this._promptClass[useTR] + '"><span>' +
 			prompt + '</span></div>' : '');/**/
-                    html +=  '<div class="calendar-links">' + (isRTL ? next : prev)   ;
-                    html +=    (isRTL ? prev : next) + '</div>' ;
+
 		var firstDay = parseInt(this._get(inst, 'firstDay'), 10);
 		firstDay = (isNaN(firstDay) ? 0 : firstDay);
 		var changeFirstDay = this._get(inst, 'changeFirstDay');
@@ -1773,28 +1769,25 @@ $.extend(Datepick.prototype, {
 				var cursorDate = this._daylightSavingAdjust(
 					new Date(drawYear, drawMonth, inst.cursorDate.getDate()));
 				html += '<div class="' + this._oneMonthClass[useTR] +            // Responsive skin
-					(col == 0 && !useTR ? ' ' + this._newRowClass[useTR] : '') + '">' +
-					this._generateMonthYearHeader(inst, drawMonth, drawYear, minDate, maxDate,
-					cursorDate, row > 0 || col > 0, useTR, showStatus, initStatus, monthNames) + // Draw month headers
-					'<table class="' + this._tableClass[useTR] + '" cellpadding="0" cellspacing="0"><thead>' +
-					'<tr class="' + this._tableHeaderClass[useTR] + '">' + (showWeeks ? '<th' +
+					(col == 0 && !useTR ? ' ' + this._newRowClass[useTR] : '') + '">';
+                html +=  '<div class="calendar-links webix_cal_month">' + (isRTL ? next : prev)   ;
+                html +=    (isRTL ? prev : next);
+                html += this._generateMonthYearHeader(inst, drawMonth, drawYear, minDate, maxDate,
+					cursorDate, row > 0 || col > 0, useTR, showStatus, initStatus, monthNames); // Draw month headers
+                html +=	'</div>' ;
+				html += '<table class="' + this._tableClass[useTR] + '" cellpadding="0" cellspacing="0"><thead>' +
+					'<tr class="webix_cal_header ' + this._tableHeaderClass[useTR] + '"><th class="webix_cal_week_header" style="width: 56px;"></th>' + (showWeeks ? '<th style="width: 56px;"' +
 					this._addStatus(useTR, showStatus, inst.id, weekStatus, initStatus) + '>' +
 					this._get(inst, 'weekHeader') + '</th>' : '');
 				for (var dow = 0; dow < 7; dow++) { // Days of the week
 					var day = (dow + firstDay) % 7;
 					var dayStatus = (!showStatus || !changeFirstDay ? '' :
 						status.replace(/DD/, dayNames[day]).replace(/D/, dayNamesShort[day]));
-					html += '<th' + ((dow + firstDay + 6) % 7 < 5 ? '' :
-						' class="' + this._weekendClass[useTR] + '"') + '>' +
-						(!changeFirstDay ? '<span' +
-						this._addStatus(useTR, showStatus, inst.id, dayNames[day], initStatus) :
-						'<a href="javascript:void(0)" onclick="jQuery.datepick._changeFirstDay(\'#' +
-						inst.id + '\', ' + day + ');"' +
-						this._addStatus(useTR, showStatus, inst.id, dayStatus, initStatus)) +
-						' title="' + dayNames[day] + '">' +
-						dayNamesMin[day] + (changeFirstDay ? '</a>' : '</span>') + '</th>';
+					html += '<th style="width: 56px;"' + ((dow + firstDay + 6) % 7 < 5 ? '' :
+						' class="' + this._weekendClass[useTR] + '"') + ' title="' + dayNames[day] + '">' +
+                        dayNamesMin[day].toUpperCase() + '</th>';
 				}
-				html += '</tr></thead><tbody>';
+				html += '</tr></thead><tbody class="webix_cal_body">';
 				var daysInMonth = this._getDaysInMonth(drawYear, drawMonth);
 				if (drawYear == inst.cursorDate.getFullYear() && drawMonth == inst.cursorDate.getMonth())
 					inst.cursorDate.setDate(Math.min(inst.cursorDate.getDate(), daysInMonth));
@@ -1802,8 +1795,8 @@ $.extend(Datepick.prototype, {
 				var numRows = (isMultiMonth ? 6 : Math.ceil((leadDays + daysInMonth) / 7));
 				var printDate = this._daylightSavingAdjust(new Date(drawYear, drawMonth, 1 - leadDays));
 				for (var dRow = 0; dRow < numRows; dRow++) { // Create datepicker rows
-					html += '<tr class="' + this._weekRowClass[useTR] + '">' +
-						(showWeeks ? '<td class="' + this._weekColClass[useTR] + '"' +
+					html += '<tr class="webix_cal_row ' + this._weekRowClass[useTR] + '" style="height:29px;line-height:29px">' +
+						(showWeeks ? '<td style="width:56px" class="webix_cal_day ' + this._weekColClass[useTR] + '"' +
 						this._addStatus(useTR, showStatus, inst.id, weekStatus, initStatus) + '>' +
 						calculateWeek(printDate) + '</td>' : '');
 					for (var dow = 0; dow < 7; dow++) { // Create datepicker days
@@ -1819,7 +1812,7 @@ $.extend(Datepick.prototype, {
 							selected = selected || (inst.dates[i] &&
 								printDate.getTime() == inst.dates[i].getTime());
 						var empty = otherMonth && !showOtherMonths;
-						html += '<td data-content="" class="' + this._dayClass[useTR] +
+						html += '<td style="width:56px" data-content="" class="webix_cal_day ' + this._dayClass[useTR] +
 							((dow + firstDay + 6) % 7 >= 5 ? ' ' + this._weekendClass[useTR] : '') + // Highlight weekends
 							(otherMonth ? ' ' + this._otherMonthClass[useTR] : '') + // Highlight days from other months
 							((printDate.getTime() == cursorDate.getTime() &&
@@ -1896,12 +1889,11 @@ $.extend(Datepick.prototype, {
 		var changeMonth = this._get(inst, 'changeMonth');
 		var changeYear = this._get(inst, 'changeYear');
 		var showMonthAfterYear = this._get(inst, 'showMonthAfterYear');
-		var html = '<div class="' + this._monthYearClass[useTR] + '">';
+		var html = '<span class="webix_cal_month_name ' + this._monthYearClass[useTR] + '">';
 		var monthHtml = '';
 		// Month selection
 		if (secondary || !changeMonth)
-			monthHtml += '<span class="' + this._monthClass[useTR] + '">' +
-				monthNames[drawMonth] + '</span>';
+			monthHtml += monthNames[drawMonth];
 		else {
 			var inMinYear = (minDate && minDate.getFullYear() == drawYear);
 			var inMaxYear = (maxDate && maxDate.getFullYear() == drawYear);
@@ -1923,7 +1915,7 @@ $.extend(Datepick.prototype, {
 			html += monthHtml + (secondary || !changeMonth || !changeYear ? '&#xa0;' : '');
 		// Year selection
 		if (secondary || !changeYear)
-			html += '<span class="' + this._yearClass[useTR] + '">' + drawYear + '</span>';
+			html +=  drawYear;
 		else {
 			// Determine range of years to display
 			var years = this._get(inst, 'yearRange').split(':');
@@ -1956,7 +1948,7 @@ $.extend(Datepick.prototype, {
 		html += this._get(inst, 'yearSuffix');
 		if (showMonthAfterYear)
 			html += (secondary || !changeMonth || !changeYear ? '&#xa0;' : '') + monthHtml;
-		html += '</div>'; // Close datepicker_header
+		html += '</span>'; // Close datepicker_header
 		return html;
 	},
 
