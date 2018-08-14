@@ -407,13 +407,13 @@ class wpdev_booking {
             else
                 $text_for_day_cell = date('d');
             
-            $my_result .= '<div class="block_hints datepick">';
+            $my_result .= '<ul class="calendar-legend block_hints datepick">';
             if ($booking_legend_is_show_item_available  == 'On') // __('Available' ,'booking')
-                $my_result .= '<div class="wpdev_hint_with_text"><div class="block_free datepick-days-cell"><a>'.$text_for_day_cell.'</a></div><div class="block_text">- '. $booking_legend_text_for_item_available.'</div></div>';
+                $my_result .= '<li class="selected">'. $booking_legend_text_for_item_available.'</li>';
             if ($booking_legend_is_show_item_approved  == 'On') // __('Booked' ,'booking') 
-                $my_result .= '<div class="wpdev_hint_with_text"><div class="block_booked date_approved">'.$text_for_day_cell.'</div><div class="block_text">- '.$booking_legend_text_for_item_approved.'</div></div>';
+                $my_result .= '<li class="avail">'.$booking_legend_text_for_item_approved.'</li>';
             if ($booking_legend_is_show_item_pending  == 'On') // __('Pending' ,'booking') 
-                $my_result .= '<div class="wpdev_hint_with_text"><div class="block_pending date2approve">'.$text_for_day_cell.'</div><div class="block_text">- '.$booking_legend_text_for_item_pending.'</div></div>';
+                $my_result .= '<li class="not-avail">'.$booking_legend_text_for_item_pending.'</li>';
 
             if ( class_exists('wpdev_bk_biz_s') ) {
 
@@ -437,7 +437,7 @@ class wpdev_booking {
                 }
                 
             }
-            $my_result .= '</div><div class="wpdev_clear_hint"></div>';
+            $my_result .= '</ul><div class="wpdev_clear_hint"></div>';
         }
         return $my_result;
     }
@@ -493,7 +493,7 @@ class wpdev_booking {
         $booking_timeslot_day_bg_as_available = ( $booking_timeslot_day_bg_as_available === 'On' ) ? ' wpbc_timeslot_day_bg_as_available' : '';
 
         $calendar  = $style. 
-                     '<div class="bk_calendar_frame months_num_in_row_'.$months_num_in_row.' cal_month_num_'.$cal_count . $booking_timeslot_day_bg_as_available . '" style="'.$width.'">'.
+                     '<div class="webix_view webix_calendar bk_calendar_frame months_num_in_row_'.$months_num_in_row.' cal_month_num_'.$cal_count . $booking_timeslot_day_bg_as_available . '" style="border-width: 1px; width: 480px; height: 250px;">'.
                         '<div id="calendar_booking'.$bk_type.'">'.
                             __('Calendar is loading...' ,'booking').
                         '</div>'.

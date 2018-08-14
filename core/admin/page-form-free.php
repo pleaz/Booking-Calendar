@@ -432,14 +432,14 @@ class WPBC_Page_SettingsFormFieldsFree extends WPBC_Page_Structure {
 	    $booking_form_structure = 'wpbc_' . $booking_form_structure;
 
 
-	    $my_form = '<div class="wpbc_booking_form_structure '. $booking_form_structure . '">' . "\n";
+	    $my_form = '<div id="calendar-block" class="flex wpbc_booking_form_structure '. $booking_form_structure . '">' . "\n";
 
 
 	    $my_form .= '  <div class="wpbc_structure_calendar">' . "\n";
         $my_form .= '    [calendar]' . "\n";
 
 	    $my_form .= '  </div>' . "\n";
-	    $my_form .= '  <div class="wpbc_structure_form">' . "\n";
+	    $my_form .= '  <div class="wpbc_structure_form right-block">' . "\n";
 
 
         $skip_already_exist_field_types = array( 'calendar', 'submit', 'captcha' );
@@ -468,25 +468,24 @@ class WPBC_Page_SettingsFormFieldsFree extends WPBC_Page_Structure {
                     if ( function_exists('icl_translate') )                             // WPML    
                         $form_field['label'] = icl_translate( 'wpml_custom', 'wpbc_custom_form_field_label_' . $form_field['name'] , $form_field['label'] );
                  
-                    $my_form.='  <div class="form-group">';
+                    if ( $form_field['type'] == 'textarea' ) $textarea_if = ''; else $textarea_if = ' flex';
+
+                    $my_form.='  <div class="item'.$textarea_if.'">';
                     
                     if ( $form_field['type'] != 'checkbox' )
-                        $my_form.='  <label for="'. $form_field['name'] . $my_boook_type.'" class="control-label">'
+                        $my_form.='  <div class="title">'
                                     . $form_field['label']
                                     . ( ( $form_field['required'] == 'On' ) ? '*' : '' )
-                                  . ':</label>';
-                    
-                    $my_form.='   <div class="controls">';
+                                  . ':</div>';
 
-                    
                     // Fields //////////////////////////////////////////////////
                     if ( $form_field['type'] == 'text' )
-                        $my_form.='   <input type="text" name="'. $form_field['name'] . $my_boook_type.'" id="'. $form_field['name'] . $my_boook_type.'" class="input-xlarge'
+                        $my_form.='   <input type="text" name="'. $form_field['name'] . $my_boook_type.'" id="'. $form_field['name'] . $my_boook_type.'" class="input-form input-xlarge'
                                         . ( ( $form_field['required'] == 'On' ) ? ' wpdev-validates-as-required' : '' ) 
                                       .'" />';
 
                     if ( $form_field['type'] == 'email' )
-                        $my_form.='   <input type="text" name="'. $form_field['name'] . $my_boook_type.'" id="'. $form_field['name'] . $my_boook_type.'" class="input-xlarge wpdev-validates-as-email'
+                        $my_form.='   <input type="text" name="'. $form_field['name'] . $my_boook_type.'" id="'. $form_field['name'] . $my_boook_type.'" class="input-form input-xlarge wpdev-validates-as-email'
                                         . ( ( $form_field['required'] == 'On' ) ? ' wpdev-validates-as-required' : '' ) 
                                         . ' wpdev-validates-as-required'        //FixIn: 7.0.1.22
                                       .'" />';
@@ -546,19 +545,19 @@ class WPBC_Page_SettingsFormFieldsFree extends WPBC_Page_Structure {
                     }
 
                     if ( $form_field['type'] == 'textarea' ) {
-                        $my_form.='   <textarea  rows="3" name="'. $form_field['name'] . $my_boook_type.'" id="'. $form_field['name'] . $my_boook_type.'" class="input-xlarge'
+                        $my_form.='   <textarea  rows="2" name="'. $form_field['name'] . $my_boook_type.'" id="'. $form_field['name'] . $my_boook_type.'" class="input-xlarge'
                                     . ( ( $form_field['required'] == 'On' ) ? ' wpdev-validates-as-required' : '' ) 
                                     . '" >';																			//FixIn: 8.1.1.4
 
                         $my_form.='</textarea>'; 
                     }
-                    
-                    $my_form.='</div></div>';
+
+                    $my_form.='</div>';
             }            
         }
 
-        $my_form.='<div class="form-group">[captcha]</div>' . "\n";
-		$my_form.='<div class="form-group"><button class="btn btn-default" type="button" onclick="mybooking_submit(this.form,'.$my_boook_type.',\''.wpbc_get_booking_locale().'\');" >'.__('Send' ,'booking').'</button></div>' . "\n";
+        $my_form.='<div class="item">[captcha]</div>' . "\n";
+		$my_form.='<button class="btn btn-default" type="button" onclick="mybooking_submit(this.form,'.$my_boook_type.',\''.wpbc_get_booking_locale().'\');" ><span>'.__('Send' ,'booking').'</span></button>' . "\n";
 
 	    //FixIn: 8.0.1.5
 	    $my_form .= '  </div>' . "\n";		// .wpbc_structure_form					|| .wpbc_structure_submit
