@@ -52,8 +52,9 @@ class WPBC_CSS extends WPBC_JS_CSS{
 
     public function enqueue( $where_to_load ) {        
         
-        wp_enqueue_style('wpdevelop-bts',       wpbc_plugin_url( '/assets/libs/bootstrap/css/bootstrap.css' ),          array(), '3.3.5.1');
-        wp_enqueue_style('wpdevelop-bts-theme', wpbc_plugin_url( '/assets/libs/bootstrap/css/bootstrap-theme.css' ),    array(), '3.3.5.1');
+        if( $where_to_load == 'admin' ) { wp_enqueue_style('wpdevelop-bts',       wpbc_plugin_url( '/assets/libs/bootstrap/css/bootstrap.css' ),          array(), '3.3.5.1'); }
+        else { wp_enqueue_style('wpdevelop-bts',       wpbc_plugin_url( '/assets/libs/bootstrap/css/bootstrap-front.css' ),          array(), '3.3.5.1'); }
+        if( $where_to_load == 'admin' ) wp_enqueue_style('wpdevelop-bts-theme', wpbc_plugin_url( '/assets/libs/bootstrap/css/bootstrap-theme.css' ),    array(), '3.3.5.1');
                    
         if ( $where_to_load == 'admin' ) {                                                                                                      // Admin CSS files            
 
@@ -69,16 +70,19 @@ class WPBC_CSS extends WPBC_JS_CSS{
             wp_enqueue_style( 'wpbc-admin-skin',            wpbc_plugin_url( '/css/admin-skin.css' ),                   array( 'wpbc-admin-pages' ), WP_BK_VERSION_NUM);            //FixIn: 8.0.2.4
             wp_enqueue_style( 'wpbc-css-print',             wpbc_plugin_url( '/css/print.css' ),                        array(), WP_BK_VERSION_NUM);
         }         
-        if (  ( $where_to_load != 'admin' ) || ( wpbc_is_new_booking_page() )  ){                                                               // Client or Add New Booking page
+        if (  /*( $where_to_load != 'admin' ) ||*/ ( wpbc_is_new_booking_page() )  ){                                                               // Client or Add New Booking page
             wp_enqueue_style( 'wpbc-client-pages',          wpbc_plugin_url( '/css/client.css' ),                       array(), WP_BK_VERSION_NUM);            
         }        
-        if (  ( $where_to_load != 'admin' ) || ( wpbc_is_bookings_page() )  ){                                                                  // Client or Booking Listing / Timeline pages
-            wp_enqueue_style( 'wpbc-admin-timeline',        wpbc_plugin_url( '/css/timeline.css' ),                     array(), WP_BK_VERSION_NUM);                        
+        if (  /*( $where_to_load != 'admin' ) ||*/ ( wpbc_is_bookings_page() )  ){                                                                  // Client or Booking Listing / Timeline pages
+            wp_enqueue_style( 'wpbc-admin-timeline',        wpbc_plugin_url( '/css/timeline.css' ),                     array(), WP_BK_VERSION_NUM);
         }        
-        wp_enqueue_style('wpbc-calendar',   wpbc_plugin_url( '/css/calendar.css' ),                                     array(), WP_BK_VERSION_NUM);        
+        //wp_enqueue_style('wpbc-calendar',   wpbc_plugin_url( '/css/calendar.css' ),                                     array(), WP_BK_VERSION_NUM);
                                                                                                                                                 // Calendar Skins
+        wp_enqueue_style('wpbc-my-calendar', wpbc_plugin_url( '/css/my-calendar.css' ), array(), WP_BK_VERSION_NUM);
+        wp_enqueue_style('wpbc-calendar-custom', wpbc_plugin_url( '/css/calendar-custom.css' ), array(), WP_BK_VERSION_NUM);
+
         $calendar_skin_path = wpbc_get_calendar_skin_url();
-        if ( ! empty( $calendar_skin_path ) )
+        if ( ! empty( $calendar_skin_path ) && $where_to_load == 'admin' )
             wp_enqueue_style('wpbc-calendar-skin', $calendar_skin_path ,                                                array(), WP_BK_VERSION_NUM);
     
         do_action( 'wpbc_enqueue_css_files', $where_to_load );        

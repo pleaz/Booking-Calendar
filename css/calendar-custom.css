@@ -1,0 +1,20 @@
+.webix_view .datepick{width: 100%}
+.webix_view .datepick td, .webix_view .datepick th{border: inherit;padding: inherit;text-align: inherit; font-weight: inherit;}
+.webix_view .webix_cal_header{margin: 0;height:auto;}
+.webix_view .webix_cal_header th{text-align:center;height: 35px;color:#666;line-height: 35px;}
+.webix_view .webix_cal_header th{font-size:12px;width: calc(100% / 7) !important;border-right: 1px solid #ddd;border-top: 1px solid #ddd;}
+.webix_cal_body .webix_cal_row>td{text-align:center;height:100%;position: relative;border-top: 1px solid #d0d4d9;border-right: 1px solid #d0d4d9;border-left: 0;width: calc(100% / 7) !important;}
+.block_hints .block_time, .datepick-inline .timespartly{background-image: url("/wp-content/plugins/booking/assets/img/clock_fill.png");background-repeat: no-repeat;background-position: 100% 100%;}
+td.webix_cal_day a {color: #000;}
+td.webix_cal_day a:hover, td.webix_cal_day a:focus {color: #000;text-decoration: inherit;}
+.webix_cal_body .webix_cal_day.date_available.webix_cal_select{background-color: #9e0b0b;}
+.webix_cal_body .webix_cal_day.date_available.webix_cal_select.timespartly{background-color: #9e0b0b;}
+.webix_cal_body .webix_cal_day.date_available.webix_cal_select.date_approved{background-color: #9e0b0b;}
+.webix_cal_body .webix_cal_day.date_available.timespartly{background-color: #77aaff;}
+.webix_cal_body .webix_cal_day.date_available.date_approved{background-color: #5577aa;}
+.webix_cal_body .webix_cal_day.date_available{background-color: #f5f5f5;}
+.webix_cal_body td.webix_cal_day.date_available.webix_cal_select a{color:#fff }
+.webix_cal_body td.webix_cal_day.date_available.timespartly a{color:#fff }
+.webix_cal_body td.webix_cal_day.date_available.date_approved a{color:#fff }
+.booking_form_div ul.calendar-legend {margin: 30px 0;}
+.webix_cal_week_num, .webix_cal_week_header{display:none!important}
